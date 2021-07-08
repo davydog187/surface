@@ -10,7 +10,10 @@ defmodule Surface.Directive.SlotProps do
     }
   end
 
-  def extract(_, _), do: []
+  def extract(dir, _) do
+    IO.inspect(dir, label: "dir")
+    []
+  end
 
   def process(directive, %AST.Slot{} = slot) do
     %AST.Directive{value: %AST.AttributeExpr{value: value}, meta: meta} = directive

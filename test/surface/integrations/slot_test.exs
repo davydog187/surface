@@ -1214,4 +1214,36 @@ defmodule Surface.SlotSyncTest do
            ```
            """
   end
+
+  test "raise on using {... } syntax on a slot" do
+    component_code = """
+    defmodule TestComponentSplatOnSlot do
+      use Surface.Component
+
+      prop bananas, :map
+
+      slot default
+
+      def render(assigns) do
+        ~F"\""
+          <div>
+            <#slot {...@bananas}/>
+          </div>
+        "\""
+      end
+    end
+    """
+
+    message = ~r"""
+    code:7: no slot `default` defined in the component `Surface.SlotSyncTest.TestComponentWithShortSyntaxButWithoutDeclaringDefaultSlot`
+
+    Please declare the default slot using `slot default` in order to use the `<#slot />` notation.
+    """
+
+    assert_raise(CompileError, message, fn ->
+      capture_io(:standard_error, fn ->
+        Code.eval_string(component_code, [], %{__ENV__ | file: "code", line: 1})
+      end)
+    end)
+  end
 end

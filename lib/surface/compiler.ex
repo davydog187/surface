@@ -453,6 +453,8 @@ defmodule Surface.Compiler do
          slot when not is_nil(slot) <- slot do
       maybe_warn_required_slot_with_default_value(slot, children, short_slot_syntax?, meta)
 
+      IO.inspect(directives)
+
       {:ok,
        %AST.Slot{
          name: name,
@@ -1145,6 +1147,9 @@ defmodule Surface.Compiler do
 
       IOHelper.compile_error(message, expr_meta.file, expr_meta.line)
     end
+  end
+
+  defp validate_slot_directives!(directives) do
   end
 
   defp fetch_variable_value!(variable, compile_meta, expr_meta) do
